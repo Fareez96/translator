@@ -33,7 +33,7 @@ jobs:
       - name: Build
         env:
           GITHUB_PAGES: 'true'
-          VITE_NVIDIA_API_KEY: ${{ secrets.VITE_NVIDIA_API_KEY }}
+          VITE_NVIDIA_API_KEY: ${{ secrets.NWWW }}
           VITE_NVIDIA_MODEL: ${{ vars.VITE_NVIDIA_MODEL }}
           VITE_TRANSLATE_API_KEY: ${{ secrets.VITE_TRANSLATE_API_KEY }}
           VITE_TRANSLATE_PROVIDER: nvidia
