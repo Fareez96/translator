@@ -94,47 +94,65 @@ class NvidiaClient {
   }
 
   async translate(text, source, target) {
-    const response = await fetch(this.endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: this.model,
-        temperature: 0.1,
-        max_tokens: 1024,
-        messages: [
-          {
-            role: 'system',
-            content:
-              'You are a precise translation engine. Return only the translated text and no extra commentary.',
-          },
-          {
-            role: 'user',
-            content: `Translate the following text from ${source} to ${target}. Return only the translated text:\n\n${text}`,
-          },
-        ],
-      }),
-    })
+    try {
+      const response = await fetch(this.endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: this.model,
+          temperature: 0.1,
+          max_tokens: 1024,
+          messages: [
+            {
+              role: 'system',
+              content:
+                'You are a precise translation engine. Return only the translated text and no extra commentary.',
+            },
+            {
+              role: 'user',
+              content: `Translate the following text from ${source} to ${target}. Return only the translated text:\n\n${text}`,
+            },
+          ],
+        }),
+      })
 
-    if (!response.ok) {
-      if (!this.apiKey) {
-        throw new Error('NVIDIA API key is missing. Set VITE_NVIDIA_API_KEY and redeploy.')
+      if (!response.ok) {
+        const errorBody = await response.text().catch(() => '')
+
+        if (!this.apiKey) {
+          throw new Error('NVIDIA API key is missing. Set NWWW in GitHub Actions and redeploy.')
+        }
+
+        throw new Error(
+          `NVIDIA translation failed (${response.status} ${response.statusText})${errorBody ? `: ${errorBody}` : ''}`,
+        )
       }
 
-      throw new Error('Translation service failed. Please try again.')
+      const payload = await response.json()
+      const translatedText =
+        payload?.choices?.[0]?.message?.content?.trim() ?? payload?.choices?.[0]?.text?.trim()
+
+      if (!translatedText) {
+        throw new Error('No translation returned by NVIDIA.')
+      }
+
+      return translatedText
+    } catch (error) {
+      const fallbackClient = clients.mymemory
+
+      if (!fallbackClient) {
+        throw error
+      }
+
+      try {
+        return await fallbackClient.translate(text, source, target)
+      } catch {
+        throw error
+      }
     }
-
-    const payload = await response.json()
-    const translatedText =
-      payload?.choices?.[0]?.message?.content?.trim() ?? payload?.choices?.[0]?.text?.trim()
-
-    if (!translatedText) {
-      throw new Error('No translation returned by API.')
-    }
-
-    return translatedText
   }
 }
 
