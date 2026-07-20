@@ -116,6 +116,8 @@ If you leave `VITE_TRANSLATE_PROVIDER` unset, the app uses LibreTranslate when a
 
 Voice input works best in Chrome or Edge on HTTPS sites. GitHub Pages is HTTPS, but browsers that do not expose the Web Speech API will show the fallback message in the app.
 
+For GitHub Pages deployments, add `VITE_TRANSLATE_API_KEY` in the repo's GitHub Actions secrets so the workflow can inject it during the build.
+
 ## Deploy on Vercel
 
 1. Push repo to GitHub.

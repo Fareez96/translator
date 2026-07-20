@@ -33,6 +33,8 @@ jobs:
       - name: Build
         env:
           GITHUB_PAGES: 'true'
+          VITE_TRANSLATE_API_KEY: ${{ secrets.VITE_TRANSLATE_API_KEY }}
+          VITE_TRANSLATE_PROVIDER: libre
         run: npm run build
 
       - name: Setup Pages
