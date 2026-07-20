@@ -47,9 +47,9 @@ const TranslatorPage = () => {
     stopListening,
     clearError: clearRecognitionError,
   } = useSpeechRecognition({
-    onTranscript: async (transcript) => {
+    onTranscript: async (transcript, isFinal) => {
       setInputText(transcript)
-      if (transcript.trim()) {
+      if (isFinal && transcript.trim()) {
         await handleTranslate(transcript)
       }
     },

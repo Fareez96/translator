@@ -29,7 +29,11 @@ export const useSpeechRecognition = ({ onTranscript }) => {
       language,
       onStart: () => setIsListening(true),
       onEnd: () => setIsListening(false),
-      onResult: (text) => onTranscript?.(text),
+      onResult: (text, isFinal) => {
+        if (text) {
+          onTranscript?.(text, isFinal)
+        }
+      },
       onError: (recognitionError) => {
         setError(formatRecognitionError(recognitionError))
       },

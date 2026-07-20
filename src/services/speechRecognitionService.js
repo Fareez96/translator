@@ -12,12 +12,17 @@ export const createSpeechRecognition = ({ language, onResult, onError, onEnd, on
 
   const recognition = new SpeechRecognition()
   recognition.continuous = false
-  recognition.interimResults = false
+  recognition.interimResults = true
+  recognition.maxAlternatives = 1
   recognition.lang = language
 
   recognition.onresult = (event) => {
-    const transcript = event.results?.[0]?.[0]?.transcript ?? ''
-    onResult?.(transcript)
+    const transcript = Array.from(event.results ?? [])
+      .map((result) => result?.[0]?.transcript ?? '')
+      .join(' ')
+      .trim()
+
+    onResult?.(transcript, event.results?.[event.results.length - 1]?.isFinal ?? false)
   }
   recognition.onerror = (event) => onError?.(event.error)
   recognition.onend = () => onEnd?.()

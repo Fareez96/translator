@@ -80,7 +80,7 @@ src/
 
 Translation is abstracted through `src/services/translationService.js`:
 
-- Default provider: LibreTranslate
+- Default provider: LibreTranslate when `VITE_TRANSLATE_API_KEY` is set, otherwise MyMemory fallback
 - Future providers (Google/Azure/DeepL) can be added behind the same interface
 
 Speech capabilities are isolated in:
@@ -107,8 +107,14 @@ npm run build
 Optional:
 
 ```bash
+VITE_TRANSLATE_PROVIDER=libre
 VITE_TRANSLATE_API_URL=https://translate.argosopentech.com/translate
+VITE_TRANSLATE_API_KEY=your_api_key_here
 ```
+
+If you leave `VITE_TRANSLATE_PROVIDER` unset, the app uses LibreTranslate when an API key is present and falls back to MyMemory otherwise.
+
+Voice input works best in Chrome or Edge on HTTPS sites. GitHub Pages is HTTPS, but browsers that do not expose the Web Speech API will show the fallback message in the app.
 
 ## Deploy on Vercel
 
@@ -117,6 +123,7 @@ VITE_TRANSLATE_API_URL=https://translate.argosopentech.com/translate
 3. Build command: `npm run build`
 4. Output directory: `dist`
 5. Add optional env var `VITE_TRANSLATE_API_URL`.
+6. Add `VITE_TRANSLATE_API_KEY` if your LibreTranslate instance requires one.
 
 ## Deploy on GitHub Hosting (GitHub Pages)
 
