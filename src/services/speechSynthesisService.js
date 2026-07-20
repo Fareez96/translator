@@ -4,7 +4,7 @@ export const isSpeechSynthesisSupported = () =>
 export const resolveVoice = (languageCode) => {
   if (!isSpeechSynthesisSupported()) return null
 
-  const locale = languageCode === 'hi' ? 'hi' : 'en'
+  const locale = languageCode === 'hi' || languageCode === 'romaji' ? 'ja' : 'en'
   const voices = window.speechSynthesis.getVoices()
 
   return (
@@ -27,7 +27,7 @@ export const speak = ({ text, languageCode, onStart, onEnd, onError }) => {
     utterance.voice = voice
     utterance.lang = voice.lang
   } else {
-    utterance.lang = languageCode === 'hi' ? 'hi-IN' : 'en-US'
+    utterance.lang = languageCode === 'hi' || languageCode === 'romaji' ? 'ja-JP' : 'en-US'
   }
 
   utterance.onstart = () => onStart?.()

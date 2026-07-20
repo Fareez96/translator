@@ -16,6 +16,7 @@ export const LANGUAGES = {
   id: { code: 'id', name: 'Indonesian', locale: 'id-ID', speechLocale: 'id-ID' },
   it: { code: 'it', name: 'Italian', locale: 'it-IT', speechLocale: 'it-IT' },
   ja: { code: 'ja', name: 'Japanese', locale: 'ja-JP', speechLocale: 'ja-JP' },
+  romaji: { code: 'romaji', name: 'Romanji', locale: 'ja-JP', speechLocale: 'ja-JP' },
   ko: { code: 'ko', name: 'Korean', locale: 'ko-KR', speechLocale: 'ko-KR' },
   ms: { code: 'ms', name: 'Malay', locale: 'ms-MY', speechLocale: 'ms-MY' },
   nl: { code: 'nl', name: 'Dutch', locale: 'nl-NL', speechLocale: 'nl-NL' },

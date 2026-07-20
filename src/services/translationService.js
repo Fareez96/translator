@@ -94,6 +94,13 @@ class NvidiaClient {
   }
 
   async translate(text, source, target) {
+    const isRomajiMode = source === 'romaji' || target === 'romaji'
+    const prompt = isRomajiMode
+      ? target === 'romaji'
+        ? `Transliterate the following Japanese text into Romanji (Latin letters). Return only the Romanji output and no extra commentary.\n\n${text}`
+        : `Convert the following Romanji (Latin letters) into natural Japanese text. Return only the Japanese output and no extra commentary.\n\n${text}`
+      : `Translate the following text from ${source} to ${target}. Return only the translated text and no extra commentary.\n\n${text}`
+
     try {
       const response = await fetch(this.endpoint, {
         method: 'POST',
@@ -109,11 +116,13 @@ class NvidiaClient {
             {
               role: 'system',
               content:
-                'You are a precise translation engine. Return only the translated text and no extra commentary.',
+                isRomajiMode
+                  ? 'You are a precise transliteration engine. Return only the requested Romanji or Japanese output and no extra commentary.'
+                  : 'You are a precise translation engine. Return only the translated text and no extra commentary.',
             },
             {
               role: 'user',
-              content: `Translate the following text from ${source} to ${target}. Return only the translated text:\n\n${text}`,
+              content: prompt,
             },
           ],
         }),
@@ -141,6 +150,10 @@ class NvidiaClient {
 
       return translatedText
     } catch (error) {
+      if (isRomajiMode) {
+        throw error
+      }
+
       const fallbackClient = clients.mymemory
 
       if (!fallbackClient) {
