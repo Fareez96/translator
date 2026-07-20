@@ -119,7 +119,7 @@ If you leave `VITE_TRANSLATE_PROVIDER` unset, the app uses NVIDIA when `VITE_NVI
 
 Voice input works best in Chrome or Edge on HTTPS sites. GitHub Pages is HTTPS, but browsers that do not expose the Web Speech API will show the fallback message in the app.
 
-For GitHub Pages deployments, add `VITE_NVIDIA_API_KEY` or `VITE_TRANSLATE_API_KEY` in the repo's GitHub Actions secrets so the workflow can inject it during the build.
+For GitHub Pages deployments, add `NWWW` or `VITE_TRANSLATE_API_KEY` in the repo's GitHub Actions secrets so the workflow can inject it during the build. The workflow maps `NWWW` to the app's `VITE_NVIDIA_API_KEY` variable.
 
 ## Deploy on Vercel
 
