@@ -17,6 +17,7 @@ import {
 import { useMemo, useRef, useState } from 'react'
 import HistoryPanel from '../components/HistoryPanel'
 import LanguageSelector from '../components/LanguageSelector'
+import VoiceSelector from '../components/VoiceSelector'
 import ThemeToggle from '../components/ThemeToggle'
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts'
 import { useLocalStorage } from '../hooks/useLocalStorage'
@@ -34,6 +35,7 @@ const TranslatorPage = () => {
   const [inputText, setInputText] = useState('')
   const [history, setHistory] = useLocalStorage('translator-history', [])
   const [historyQuery, setHistoryQuery] = useState('')
+  const [selectedVoiceURI, setSelectedVoiceURI] = useLocalStorage('translator-voice-uri', '')
   const fileInputRef = useRef(null)
   const { showToast } = useToast()
 
@@ -60,6 +62,8 @@ const TranslatorPage = () => {
     isSpeaking,
     isPaused,
     error: speechError,
+    voices,
+    refreshVoices,
     speakText,
     pause,
     resume,
@@ -326,7 +330,9 @@ const TranslatorPage = () => {
                 <div className="flex flex-wrap items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => speakText({ text: translatedText, languageCode: targetLanguage })}
+                    onClick={() =>
+                      speakText({ text: translatedText, languageCode: targetLanguage, voiceURI: selectedVoiceURI })
+                    }
                     className="inline-flex items-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-3 py-2 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800"
                     disabled={!speechSupported || !translatedText}
                   >
@@ -360,6 +366,25 @@ const TranslatorPage = () => {
                 <span className="text-slate-600 dark:text-slate-300">
                   Words: {countWords(translatedText)}
                 </span>
+              </div>
+
+              <div className="mt-3 grid gap-3 md:grid-cols-2">
+                <VoiceSelector
+                  label="Voice"
+                  value={selectedVoiceURI}
+                  onChange={setSelectedVoiceURI}
+                  voices={voices}
+                  disabled={!speechSupported}
+                  onRefresh={refreshVoices}
+                />
+
+                <div className="rounded-2xl border border-slate-300/70 bg-white/80 p-3 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-300">
+                  <p className="font-semibold text-slate-700 dark:text-slate-200">Voice tips</p>
+                  <p className="mt-1">
+                    Pick a specific browser voice, or leave it on Auto for the closest match to the selected
+                    language.
+                  </p>
+                </div>
               </div>
             </div>
 
