@@ -81,6 +81,7 @@ src/
 Translation is abstracted through `src/services/translationService.js`:
 
 - Default provider: LibreTranslate when `VITE_TRANSLATE_API_KEY` is set, otherwise MyMemory fallback
+- NVIDIA support: set `VITE_NVIDIA_API_KEY` to use NVIDIA's OpenAI-compatible chat endpoint for translation
 - Future providers (Google/Azure/DeepL) can be added behind the same interface
 
 Speech capabilities are isolated in:
@@ -107,16 +108,18 @@ npm run build
 Optional:
 
 ```bash
+VITE_NVIDIA_API_KEY=your_nvidia_api_key_here
+VITE_NVIDIA_MODEL=meta/llama-3.1-8b-instruct
 VITE_TRANSLATE_PROVIDER=libre
 VITE_TRANSLATE_API_URL=https://translate.argosopentech.com/translate
 VITE_TRANSLATE_API_KEY=your_api_key_here
 ```
 
-If you leave `VITE_TRANSLATE_PROVIDER` unset, the app uses LibreTranslate when an API key is present and falls back to MyMemory otherwise.
+If you leave `VITE_TRANSLATE_PROVIDER` unset, the app uses NVIDIA when `VITE_NVIDIA_API_KEY` is present, LibreTranslate when `VITE_TRANSLATE_API_KEY` is present, and falls back to MyMemory otherwise.
 
 Voice input works best in Chrome or Edge on HTTPS sites. GitHub Pages is HTTPS, but browsers that do not expose the Web Speech API will show the fallback message in the app.
 
-For GitHub Pages deployments, add `VITE_TRANSLATE_API_KEY` in the repo's GitHub Actions secrets so the workflow can inject it during the build.
+For GitHub Pages deployments, add `VITE_NVIDIA_API_KEY` or `VITE_TRANSLATE_API_KEY` in the repo's GitHub Actions secrets so the workflow can inject it during the build.
 
 ## Deploy on Vercel
 
